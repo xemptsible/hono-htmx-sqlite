@@ -1,4 +1,3 @@
-import { html } from 'hono/html';
 import { jsxRenderer } from 'hono/jsx-renderer';
 
 const layoutRenderer = jsxRenderer(({ children, title }) => {
