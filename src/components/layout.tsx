@@ -12,11 +12,17 @@ const layoutRenderer = jsxRenderer(({ children, title }) => {
         <title>{title}</title>
         <link
           rel='stylesheet'
-          href='/vanilla.css'></link>
-        <script src='/htmx.min.js'></script>
-        <script src='/response-targets.min.js'></script>
-        <script src='/htmx-event-listener.min.js'></script>
+          href='css/reset.css'></link>
+        <link
+          rel='stylesheet'
+          href='css/vanilla.css'></link>
+        <link
+          rel='stylesheet'
+          href='css/style.css'></link>
       </head>
+      <script src='/htmx.min.js'></script>
+      <script src='/response-targets.min.js'></script>
+      <script src='/htmx-event-listener.min.js'></script>
       <body hx-ext='response-targets'>{children}</body>
     </html>
   );

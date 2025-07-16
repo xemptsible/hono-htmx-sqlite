@@ -3,30 +3,43 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import api from './api/todo.js';
 import layoutRenderer from './components/layout.js';
-import NewTodo from './components/new-todo.js';
+import TodoForm from './components/todo-form.js';
+import TodoList from './components/todo-list.js';
 import TodoToolbar from './components/todo-toolbar.js';
-import { TodoList } from './components/todo.js';
 
 const HONO_PORT = 3000;
 
-export const app = new Hono();
+const app = new Hono();
 
 app.use('*', layoutRenderer);
 app.use('*', serveStatic({ root: './static' }));
 
-app.get('/', (c) => {
-  return c.render(
-    <>
-      <TodoToolbar />
-      <TodoList />
-    </>,
-    { title: 'Home' }
-  );
-});
+app
+  .get('/', (c) => {
+    return c.render(
+      <>
+        <TodoToolbar />
+        <TodoList />
+      </>,
+      { title: 'Home' }
+    );
+  })
+  .get('/todo-list', (c) => c.html(<TodoList />))
+  .get('/new', (c) => {
+    return c.render(<TodoForm />, { title: 'New Todo' });
+  })
+  .post('/todo/edit/:id', async (c) => {
+    const id = c.req.param('id');
+    const { title, description } = await c.req.parseBody();
 
-app.get('/new', (c) => {
-  return c.render(<NewTodo />, { title: 'New Todo' });
-});
+    const value = {
+      id,
+      title: String(title),
+      description: String(description),
+    };
+
+    return c.render(<TodoForm value={value} />, { title: 'Update Todo' });
+  });
 
 app.route('/api', api);
 
